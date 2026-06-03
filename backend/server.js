@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;;
@@ -14,10 +15,11 @@ app.use(express.json());
 // Ganti sesuai setup lokal atau Cloud SQL / VM kamu
 // =====================
 const db = mysql.createConnection({
-  host: '34.172.113.167',       // Ganti dengan IP Cloud SQL / VM jika sudah migrasi
-  user: 'admin',            // Username MySQL
-  password: "mypassword", // Password MySQL
-  database: 'notes_123230088'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT || 3306
 });
 
 db.connect((err) => {
