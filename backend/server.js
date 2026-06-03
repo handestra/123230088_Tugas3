@@ -87,5 +87,5 @@ app.delete('/notes/:id', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server berjalan di http://localhost:${PORT}`);
+  console.log(`Server berjalan di https://be-rest-311135974217.us-central1.run.app`);
 });

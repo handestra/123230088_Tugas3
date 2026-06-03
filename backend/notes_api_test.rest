@@ -1,4 +1,4 @@
-@base_url = http://localhost:3000
+@base_url = https://be-rest-311135974217.us-central1.run.app
 
 ### Ambil Semua Catatan
 GET {{base_url}}/notes
