@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notes App</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f11;
+      --surface: #1a1a1f;
+      --border: #2e2e38;
+      --accent: #f0c040;
+      --accent2: #e06030;
+      --text: #e8e8f0;
+      --muted: #7a7a90;
+      --danger: #e05050;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 2rem 2.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    header .logo {
+      width: 36px; height: 36px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: grid; place-items: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      color: #000;
+      font-size: 1.1rem;
+    }
+
+    header h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -0.03em;
+    }
+
+    header h1 span { color: var(--accent); }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* FORM */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .form-group { margin-bottom: 0.9rem; }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.65rem 0.85rem;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea { min-height: 90px; }
+
+    .btn-row {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    button:hover { opacity: 0.85; }
+    button:active { transform: scale(0.97); }
+
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-cancel  { background: var(--border); color: var(--muted); }
+
+    /* NOTES LIST */
+    .notes-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .notes-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .count-badge {
+      background: var(--border);
+      color: var(--muted);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 99px;
+    }
+
+    #notes-list { display: grid; gap: 0.75rem; }
+
+    .note-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      display: grid;
+      grid-template-rows: auto auto auto;
+      gap: 0.4rem;
+      transition: border-color 0.2s;
+    }
+
+    .note-card:hover { border-color: #3e3e50; }
+
+    .note-card .note-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .note-card .note-body {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .note-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .note-date {
+      font-size: 0.72rem;
+      color: #55556a;
+    }
+
+    .note-actions { display: flex; gap: 0.4rem; }
+
+    .btn-edit {
+      background: transparent;
+      border: 1px solid var(--border) !important;
+      border-radius: 6px;
+      color: var(--accent);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.7rem;
+      border: none;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid var(--border) !important;
+      border-radius: 6px;
+      color: var(--danger);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.7rem;
+      border: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+    }
+
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+    .empty-state p { font-size: 0.9rem; }
+
+    .toast {
+      position: fixed;
+      bottom: 1.5rem; right: 1.5rem;
+      background: var(--accent);
+      color: #000;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.7rem 1.2rem;
+      border-radius: 8px;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">N</div>
+  <h1>Notes<span>App</span></h1>
+</header>
+
+<div class="container">
+
+  <!-- FORM TAMBAH / EDIT -->
+  <div class="form-card">
+    <h2 id="form-title">Tambah Catatan</h2>
+    <div class="form-group">
+      <label for="judul">Judul</label>
+      <input type="text" id="judul" placeholder="Masukkan judul catatan..." />
+    </div>
+    <div class="form-group">
+      <label for="isi">Isi</label>
+      <textarea id="isi" placeholder="Tulis isinya di sini..."></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="submitNote()">Simpan</button>
+      <button class="btn-cancel" id="btn-cancel" style="display:none" onclick="cancelEdit()">Batal</button>
+    </div>
+  </div>
+
+  <!-- DAFTAR CATATAN -->
+  <div class="notes-header">
+    <h2>Catatan Saya</h2>
+    <span class="count-badge" id="count-badge">0 catatan</span>
+  </div>
+  <div id="notes-list"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ==========================
+  // GANTI URL INI jika backend
+  // pindah ke VM / Cloud
+  // ==========================
+  const API = 'http://localhost:3000';
+
+  let editId = null;
+
+  // ---- FETCH ALL NOTES ----
+  async function loadNotes() {
+    const res = await fetch(`${API}/notes`);
+    const notes = await res.json();
+
+    const list = document.getElementById('notes-list');
+    const badge = document.getElementById('count-badge');
+    badge.textContent = `${notes.length} catatan`;
+
+    if (notes.length === 0) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">📝</div>
+          <p>Belum ada catatan. Tambahkan yang pertama!</p>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = notes.map(n => `
+      <div class="note-card">
+        <div class="note-title">${escHtml(n.judul)}</div>
+        <div class="note-body">${escHtml(n.isi)}</div>
+        <div class="note-footer">
+          <span class="note-date">${formatDate(n.tanggal_dibuat)}</span>
+          <div class="note-actions">
+            <button class="btn-edit" onclick="startEdit(${n.id}, '${escJs(n.judul)}', '${escJs(n.isi)}')">✏ Edit</button>
+            <button class="btn-delete" onclick="deleteNote(${n.id})">✕ Hapus</button>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ---- SUBMIT (ADD / EDIT) ----
+  async function submitNote() {
+    const judul = document.getElementById('judul').value.trim();
+    const isi   = document.getElementById('isi').value.trim();
+    if (!judul || !isi) { showToast('Judul dan isi wajib diisi!'); return; }
+
+    const method = editId ? 'PUT' : 'POST';
+    const url    = editId ? `${API}/notes/${editId}` : `${API}/notes`;
+
+    await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ judul, isi })
+    });
+
+    showToast(editId ? 'Catatan diperbarui!' : 'Catatan ditambahkan!');
+    cancelEdit();
+    loadNotes();
+  }
+
+  // ---- EDIT MODE ----
+  function startEdit(id, judul, isi) {
+    editId = id;
+    document.getElementById('judul').value = judul;
+    document.getElementById('isi').value   = isi;
+    document.getElementById('form-title').textContent = 'Edit Catatan';
+    document.getElementById('btn-cancel').style.display = 'inline-block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function cancelEdit() {
+    editId = null;
+    document.getElementById('judul').value = '';
+    document.getElementById('isi').value   = '';
+    document.getElementById('form-title').textContent = 'Tambah Catatan';
+    document.getElementById('btn-cancel').style.display = 'none';
+  }
+
+  // ---- DELETE ----
+  async function deleteNote(id) {
+    if (!confirm('Yakin ingin menghapus catatan ini?')) return;
+    await fetch(`${API}/notes/${id}`, { method: 'DELETE' });
+    showToast('Catatan dihapus!');
+    loadNotes();
+  }
+
+  // ---- HELPERS ----
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function escJs(s) {
+    return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n');
+  }
+  function formatDate(d) {
+    return new Date(d).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+  }
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  loadNotes();
+</script>
+</body>
+</html>

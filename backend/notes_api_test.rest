@@ -1,0 +1,28 @@
+@base_url = http://localhost:3000
+
+### Ambil Semua Catatan
+GET {{base_url}}/notes
+
+### Ambil Catatan by ID
+GET {{base_url}}/notes/1
+
+### Tambah Catatan Baru
+POST {{base_url}}/notes
+Content-Type: application/json
+
+{
+    "judul": "gokil",
+    "isi": "mantap"
+}
+
+### Update Catatan
+PUT {{base_url}}/notes/1
+Content-Type: application/json
+
+{
+    "judul": "cihuy",
+    "isi": "hore"
+}
+
+### Hapus Catatan
+DELETE {{base_url}}/notes/1

@@ -1,0 +1,55 @@
+### Notes App - REST API Test
+### Gunakan ekstensi "REST Client" di VS Code untuk menjalankan file ini
+### Klik "Send Request" di atas setiap request
+
+@base_url = http://localhost:3000
+
+###############################################
+# 1. GET - Ambil Semua Catatan
+###############################################
+
+### GET All Notes
+GET {{base_url}}/notes
+Content-Type: application/json
+
+###############################################
+# 2. GET - Ambil Catatan by ID
+###############################################
+
+### GET Note by ID (ganti angka 1 sesuai ID yang ada)
+GET {{base_url}}/notes/1
+Content-Type: application/json
+
+###############################################
+# 3. POST - Tambah Catatan Baru
+###############################################
+
+### POST Add New Note
+POST {{base_url}}/notes
+Content-Type: application/json
+
+{
+  "judul": "Catatan dari REST Client",
+  "isi": "Ini isi catatan yang ditambahkan menggunakan VS Code REST Client."
+}
+
+###############################################
+# 4. PUT - Edit Catatan by ID
+###############################################
+
+### PUT Update Note (ganti angka 1 sesuai ID yang ada)
+PUT {{base_url}}/notes/1
+Content-Type: application/json
+
+{
+  "judul": "Judul Sudah Diperbarui",
+  "isi": "Isi catatan ini sudah diperbarui menggunakan REST Client."
+}
+
+###############################################
+# 5. DELETE - Hapus Catatan by ID
+###############################################
+
+### DELETE Note (ganti angka 1 sesuai ID yang ada)
+DELETE {{base_url}}/notes/1
+Content-Type: application/json
